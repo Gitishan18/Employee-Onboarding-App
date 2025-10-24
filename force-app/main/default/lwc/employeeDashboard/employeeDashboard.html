@@ -1,0 +1,74 @@
+<template>
+    <div class="dashboard-container slds-p-around_medium">
+        <h1 class="slds-text-heading_large slds-m-bottom_medium">👥 Employee Onboarding Dashboard</h1>
+
+        <template if:true={displayEmployees}>
+            <template for:each={displayEmployees} for:item="emp">
+                <article key={emp.name} class="emp-card slds-m-bottom_large {emp.colorClass}">
+                    <header class="slds-grid slds-grid_align-spread slds-p-around_small">
+                        <div>
+                            <h2 class="slds-text-heading_small">{emp.name}</h2>
+                            <p class="slds-text-body_small slds-text-color_weak">{emp.department} | Start: {emp.startDate}</p>
+                        </div>
+                        <div class="slds-text-align_right">
+                            <div class="slds-text-heading_medium">{emp.progress}%</div>
+                            <lightning-progress-bar value={emp.progress} size="small" variant={emp.progressVariant}></lightning-progress-bar>
+                        </div>
+                    </header>
+
+                    <div class="emp-stats slds-grid slds-gutters slds-p-horizontal_small">
+                        <div class="stat-box completed">
+                            <div class="slds-text-heading_small">{emp.completedTasks}</div>
+                            <span>Completed</span>
+                        </div>
+                        <div class="stat-box progress">
+                            <div class="slds-text-heading_small">{emp.pendingTasks}</div>
+                            <span>In Progress</span>
+                        </div>
+                    </div>
+
+                    <div class="task-section slds-p-around_small">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">📋 Tasks</h3>
+                        <template for:each={emp.tasks} for:item="task">
+                            <div key={task.id} class="task-row">
+                                <div class="task-info">
+                                    <span class="task-status-badge 
+                                        {task.status === 'Completed' ? 'status-completed' : 
+                                         task.status === 'In Progress' ? 'status-progress' : 
+                                         'status-pending'}">{task.status}</span>
+                                    <span class="task-name">{task.name}</span>
+                                    <div class="slds-text-color_weak slds-m-left_medium">{task.category}</div>
+                                </div>
+
+                                <div class="task-date">
+                                    <template if:true={task.hasDueDate}>
+                                        <lightning-icon icon-name="utility:date_time" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                        {task.dueDate}
+                                    </template>
+                                </div>
+
+                                <div class="task-actions slds-text-align_right">
+                                    <template if:true={task.trainingLink}>
+                                        <lightning-button-icon icon-name="utility:video" variant="border-filled" alternative-text="Open Training" title="Open Training" onclick={handleTrainingClick} data-url={task.trainingLink} class="slds-m-right_x-small"></lightning-button-icon>
+                                    </template>
+                                    <template if:true={task.showComplete}>
+                                        <lightning-button-icon icon-name="utility:check" variant="success" alternative-text="Mark Complete" title="Mark Complete" onclick={handleComplete} data-task-id={task.id}></lightning-button-icon>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </article>
+            </template>
+        </template>
+
+        <template if:false={displayEmployees}>
+            <div class="slds-illustration slds-illustration_small">
+                <div class="slds-text-longform">
+                    <h3 class="slds-text-heading_medium">No Tasks Found</h3>
+                    <p class="slds-text-body_regular">There are no onboarding tasks assigned yet.</p>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

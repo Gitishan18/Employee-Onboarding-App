@@ -1,0 +1,87 @@
+<template>
+    <lightning-card title="Employee Document Submission">
+        <div class="slds-p-around_medium">
+            <div class="slds-text-heading_medium slds-m-bottom_medium">
+                Welcome, {employeeName}
+            </div>
+            <div class="slds-text-body_regular slds-m-bottom_large">
+                Please fill out the following document details:
+            </div>
+
+            <lightning-input
+                label="Aadhaar Number"
+                value={aadhaar}
+                onchange={handleChange}
+                data-id="aadhaar"
+                placeholder="Enter 12-digit Aadhaar number"
+                message-when-bad-input="Enter valid 12-digit number">
+            </lightning-input>
+
+            <lightning-input
+                label="PAN Number"
+                value={pan}
+                onchange={handleChange}
+                data-id="pan"
+                placeholder="Enter 10-character PAN (e.g., AAAAA9999A)"
+                message-when-bad-input="Enter valid PAN number">
+            </lightning-input>
+
+            <lightning-input
+                label="Passport Number"
+                value={passport}
+                onchange={handleChange}
+                data-id="passport"
+                placeholder="Enter Passport number (6-9 chars)">
+            </lightning-input>
+
+            <lightning-input
+                label="Address Proof Number"
+                value={addressProof}
+                onchange={handleChange}
+                data-id="addressProof"
+                placeholder="Enter Address Proof number">
+            </lightning-input>
+
+            <lightning-input
+                label="Bank Account Number"
+                value={bankAccount}
+                onchange={handleChange}
+                data-id="bankAccount"
+                placeholder="Enter Bank Account number (9-20 digits)">
+            </lightning-input>
+
+            <lightning-input
+                label="Driving License Number"
+                value={drivingLicense}
+                onchange={handleChange}
+                data-id="drivingLicense"
+                placeholder="Enter Driving License number (max 15 chars)">
+            </lightning-input>
+
+            <lightning-input
+                label="Voter ID Number"
+                value={voterId}
+                onchange={handleChange}
+                data-id="voterId"
+                placeholder="Enter Voter ID number (max 15 chars)">
+            </lightning-input>
+
+       
+
+            <lightning-input
+                label="Document URL"
+                value={documentUrl}
+                onchange={handleChange}
+                data-id="documentUrl"
+                placeholder="Enter Drive Url of the all the mention Documents"
+                type="url">
+            </lightning-input>
+
+            <lightning-button
+                label="Submit"
+                onclick={handleSubmit}
+                class="slds-m-top_small">
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>
