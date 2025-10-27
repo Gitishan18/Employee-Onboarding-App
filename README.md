@@ -12,6 +12,7 @@ The **Employee Onboarding App** is a Salesforce-based solution designed to strea
   - **Employee**
   - **Employee Document**
   - **Onboarding Task**
+  -  **Trainning Program**
 - Relationships:
   - Employee → Employee Documents
   - Employee → Onboarding Tasks
@@ -19,12 +20,15 @@ The **Employee Onboarding App** is a Salesforce-based solution designed to strea
 ### 2. Automation
 - Salesforce Flows to assign onboarding tasks automatically.
 - Update task status based on user actions.
+- flow for changing employee bg status
+- flow for Creating autoamted Hr policy once documented cerification completed
 
 ### 3. Apex Services
 - **EmployeeDocumentVerificationService**:  
   - Verifies employee PAN numbers against a mock API.
   - Updates the document status (`Verified` / `Rejected`) and adds notes automatically.
-- Bulk-safe implementation to handle multiple records efficiently.
+- Bulk-onboaridng task when hr policy task completed
+- onboardingDashboardController for featching all important data
 
 ### 4. Lightning Web Components (LWC)
 - Dashboard to track ongoing onboarding tasks.
@@ -33,6 +37,8 @@ The **Employee Onboarding App** is a Salesforce-based solution designed to strea
 ### 5. Integration
 - Calls external APIs (e.g., PAN verification) for employee document validation.
 
+### 6. Reports 
+for showing the Onboarding employee by Department
 ---
 
 ## Tech Stack
@@ -42,7 +48,7 @@ The **Employee Onboarding App** is a Salesforce-based solution designed to strea
   - LWC (Lightning Web Components)
   - Custom Objects
 - **External APIs**
-  - Mock API used for document verification
+  - Mock API used for document verification as https://mockapi.io/projects/68fb441894ec960660255dbf
 - **Version Control**
   - Git/GitHub
 
