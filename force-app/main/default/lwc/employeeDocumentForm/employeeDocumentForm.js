@@ -54,35 +54,7 @@ export default class EmployeeDocumentForm extends LightningElement {
             return false;
         }
 
-        // Passport: 6-9 alphanumeric
-        if (this.passport && !/^[A-Z0-9]{6,9}$/i.test(this.passport)) {
-            alert('Passport number must be 6-9 characters');
-            return false;
-        }
-
-        // Bank account: 9-20 digits
-        if (this.bankAccount && !/^\d{9,20}$/.test(this.bankAccount)) {
-            alert('Bank Account must be 9-20 digits');
-            return false;
-        }
-
-        // Driving license: optional 15 chars
-        if (this.drivingLicense && this.drivingLicense.length > 15) {
-            alert('Driving License max 15 characters');
-            return false;
-        }
-
-        // Voter ID: optional 15 chars
-        if (this.voterId && this.voterId.length > 15) {
-            alert('Voter ID max 15 characters');
-            return false;
-        }
-
-        // Document URL: optional, must be URL format
-        if (this.documentUrl && !/^(https?:\/\/[^\s]+)$/.test(this.documentUrl)) {
-            alert('Document URL must be valid');
-            return false;
-        }
+      
 
         return true;
     }

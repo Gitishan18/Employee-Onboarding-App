@@ -1,0 +1,59 @@
+<template>
+    <div class="summary-container slds-p-around_medium">
+        <h1 class="slds-text-heading_large slds-m-bottom_medium">
+            📋 Employee Onboarding Summary
+        </h1>
+
+        <template if:true={isLoading}>
+            <lightning-spinner size="medium" alternative-text="Loading..."></lightning-spinner>
+        </template>
+
+        <template if:true={summary}>
+            <div class="slds-grid slds-wrap slds-gutters">
+
+                <!-- Total Employees -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="summary-card total">
+                        <h2>Total Employees</h2>
+                        <div class="value">{totalEmployees}</div>
+                    </div>
+                </div>
+
+                <!-- Pending Background Checks -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="summary-card bgcheck">
+                        <h2>Pending Background Checks</h2>
+                        <div class="value">{pendingBgChecks}</div>
+                    </div>
+                </div>
+
+                <!-- Onboarding Completed -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="summary-card completed">
+                        <h2>Onboarding Completed</h2>
+                        <div class="value">{completedEmployees}</div>
+                    </div>
+                </div>
+
+                <!-- Circular Onboarding Progress -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="circle-card">
+                        <div class="circle" style={progressStyle}>
+                            <div class="circle-inner">
+                                <span class="percentage">{onboardingCompletion}%</span>
+                            </div>
+                        </div>
+                        <p class="circle-label">Onboarding Progress</p>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-m-top_medium">
+                ⚠️ Error loading summary data.
+            </div>
+        </template>
+    </div>
+</template>

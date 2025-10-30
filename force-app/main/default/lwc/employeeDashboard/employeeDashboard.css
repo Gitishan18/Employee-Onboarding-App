@@ -1,108 +1,95 @@
-.dashboard-title {
-    text-align: center;
-    color: #032d60;
+.dashboard-container {
+    padding: 1.5rem;
+    background-color: #f9fafb;
+}
+
+.custom-table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    background-color: white;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+.custom-table thead tr {
+    background: linear-gradient(90deg, #f4f6f9, #e9edf2);
     font-weight: 600;
-}
-
-.emp-card {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.1);
-    transition: all 0.25s ease;
-}
-.emp-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-}
-
-/* Colored headers */
-.emp-card-blue .emp-header { background: #e3f2fd; }
-.emp-card-green .emp-header { background: #e8f5e9; }
-.emp-card-purple .emp-header { background: #f3e5f5; }
-.emp-card-orange .emp-header { background: #fff3e0; }
-.emp-card-teal .emp-header { background: #e0f2f1; }
-
-/* Stat boxes */
-.stat-box {
-    flex: 1;
-    text-align: center;
-    border-radius: 6px;
-    padding: 0.5rem;
-    background: #f9f9f9;
-}
-.stat-box.completed {
-    background: #e3f8e0;
-    color: #0e8a00;
-}
-.stat-box.progress {
-    background: #fff3cd;
-    color: #a07800;
-}
-
-/* Task Section */
-.task-section {
-    margin-top: 0.5rem;
-    border-top: 1px solid #f0f0f0;
-}
-.task-title {
-    font-weight: 600;
-    color: #032d60;
-}
-
-/* Task List */
-.task-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.6rem 0;
-    border-bottom: 1px solid #f8f8f8;
-}
-.task-row:last-child {
-    border-bottom: none;
-}
-.task-info {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.task-name {
-    font-weight: 500;
-}
-
-/* Status badges */
-.task-status-badge {
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #fff;
+    color: #333;
     text-transform: uppercase;
-}
-.status-completed {
-    background: #28a745;
-}
-.status-progress {
-    background: #ffb300;
-}
-.status-pending {
-    background: #dc3545;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
 }
 
-/* Date + Actions */
-.task-date {
-    flex: 0.5;
+.custom-table tbody tr {
+    transition: background 0.2s ease-in-out;
+    cursor: default;
+}
+
+.custom-table tbody tr:nth-child(even) {
+    background-color: #fbfcfd;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #eef4ff;
+}
+
+.emp-name {
     display: flex;
     align-items: center;
-    color: #555;
-}
-.task-actions {
-    flex: 0.3;
-}
-.slds-card {
-    background-color: #f5f0ff; /* faint purple background */
+    font-weight: 600;
+    color: #1b263b;
 }
 
-.task-status-badge {
-    color: #000 !important; /* make status text black */
+.emp-icon {
+    margin-right: 0.5rem;
+    color: #0176d3;
+}
+
+.badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-success {
+    background-color: #e6f4ea;
+    color: #2e8540;
+}
+
+.badge-warning {
+    background-color: #fff7e6;
+    color: #8a6d3b;
+}
+
+.badge-error {
+    background-color: #fdecea;
+    color: #a94442;
+}
+
+.badge-neutral {
+    background-color: #f4f6f9;
+    color: #444;
+}
+
+.action-btn,
+.view-task-btn {
+    --slds-c-button-radius-border: 8px;
+    font-size: 0.8rem;
+    min-width: 90px;
+    box-shadow: none;
+}
+
+.action-btn:hover,
+.view-task-btn:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }

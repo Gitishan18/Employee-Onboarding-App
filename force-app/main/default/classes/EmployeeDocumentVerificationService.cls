@@ -1,11 +1,14 @@
-public class EmployeeDocumentVerificationService {
+public with sharing class EmployeeDocumentVerificationService {
 
-    // Your MockAPI endpoint
     private static final String MOCK_API_URL = 'https://68fb441894ec960660255dbe.mockapi.io/api/v1/pan';
 
-    public static void verifyEmployeePANsViaAPI() {
+    /**
+     * Verifies PAN for a single employee
+     */
+    public static void verifyEmployeePAN(String empName) {
+        if(String.isBlank(empName)) return;
 
-        // 1. Call the MockAPI endpoint
+        // 1. Call Mock API
         Http http = new Http();
         HttpRequest req = new HttpRequest();
         req.setEndpoint(MOCK_API_URL);
@@ -25,45 +28,44 @@ public class EmployeeDocumentVerificationService {
             return;
         }
 
-        // 2. Parse JSON into map of name -> PAN
+        // 2. Parse API response
         List<Object> mockList = (List<Object>) JSON.deserializeUntyped(res.getBody());
-        Map<String,String> mockMap = new Map<String,String>();
+        String expectedPAN;
         for(Object o : mockList) {
             Map<String,Object> m = (Map<String,Object>) o;
-            String name = (String) m.get('name');
-            String pan  = (String) m.get('pan');
-            if(name != null && pan != null) {
-                mockMap.put(name, pan);
+            if(empName == (String)m.get('name')) {
+                expectedPAN = (String)m.get('pan');
+                break;
             }
         }
 
-        // 3. Query Employee Documents with Pending status and Employee lookup
+        if(expectedPAN == null) {
+            System.debug('No PAN found for employee: ' + empName);
+            return;
+        }
+
+        // 3. Query only documents for this employee with Pending status
         List<Employee_Document__c> docs = [
             SELECT Id, PAN_Number__c, Status__c, Notes__c, Employee__r.Name
             FROM Employee_Document__c
-            WHERE Status__c = 'Pending'
+          WHERE Status__c IN ('Pending', 'Rejected') AND Employee__r.Name = :empName
+
         ];
 
-        // 4. Compare and update each record
+        // 4. Compare PAN and update
         for(Employee_Document__c doc : docs) {
-            String empName = doc.Employee__r != null ? doc.Employee__r.Name : null;
-            String expectedPAN = empName != null ? mockMap.get(empName) : null;
-
-            if(expectedPAN != null && expectedPAN == doc.PAN_Number__c) {
+            if(expectedPAN == doc.PAN_Number__c) {
                 doc.Status__c = 'Verified';
                 doc.Notes__c = (doc.Notes__c != null ? doc.Notes__c + '\n' : '') +
-                    'PAN and name matched. Verified via API.';
+                                'PAN matched. Verified via API.';
             } else {
                 doc.Status__c = 'Rejected';
                 doc.Notes__c = (doc.Notes__c != null ? doc.Notes__c + '\n' : '') +
-                    'PAN and name mismatch. Rejected via API.';
+                                'PAN mismatch. Rejected via API.';
             }
         }
 
-        // 5. Bulk update
-        if(!docs.isEmpty()) {
-            update docs;
-            System.debug(docs.size() + ' Employee Document records processed.');
-        }
+        if(!docs.isEmpty()) update docs;
+        System.debug(docs.size() + ' Employee Document records processed for ' + empName);
     }
 }

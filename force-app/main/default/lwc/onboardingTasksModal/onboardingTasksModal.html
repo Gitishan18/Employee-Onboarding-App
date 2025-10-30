@@ -1,0 +1,69 @@
+<template>
+    <template if:true={isOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container modal-container">
+
+                <!-- Header -->
+                <header class="slds-modal__header modal-header">
+                    <h2>{empName} - Onboarding Tasks</h2>
+                </header>
+
+                <!-- Body -->
+                <div class="slds-modal__content modal-body">
+                    <template if:true={noTasks}>
+                        <div class="no-tasks-message">
+                            <lightning-icon icon-name="utility:info" size="small" class="info-icon"></lightning-icon>
+                            No onboarding tasks assigned.
+                        </div>
+                    </template>
+
+                    <template if:false={noTasks}>
+                        <div class="table-wrapper">
+                            <table class="gorgeous-tasks-table">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Due Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={tasks} for:item="task">
+                                        <tr key={task.Id}>
+                                            <td>{task.Name}</td>
+                                            <td>{task.Task_Category__c}</td>
+                                            <td>{task.Status__c}</td>
+                                            <td>{task.Due_Date__c}</td>
+                                            <td>
+                                                <template if:false={task.isCompleted}>
+                                                    <lightning-button
+                                                        label="Mark as Completed"
+                                                        variant="brand-outline"
+                                                        data-id={task.Id}
+                                                        onclick={markCompleted}>
+                                                    </lightning-button>
+                                                </template>
+                                                <template if:true={task.isCompleted}>
+                                                    <span class="completed-label">✔ Completed</span>
+                                                </template>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Footer -->
+                <footer class="slds-modal__footer modal-footer">
+                    <lightning-button label="Close" onclick={closeModal}></lightning-button>
+                </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

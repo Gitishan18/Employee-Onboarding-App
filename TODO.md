@@ -1,0 +1,3 @@
+- [ ] Update OnboardingDashboardController.cls to include Background_Check_Status__c in query and add method to trigger background check
+- [ ] Update employeeDashboard.js to include background check status in data transformation
+- [ ] Update employeeDashboard.html to display background check status and add button to initiate check

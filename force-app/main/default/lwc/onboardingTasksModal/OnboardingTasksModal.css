@@ -1,0 +1,121 @@
+/* Modal container */
+.modal-container {
+    border-radius: 12px;
+    width: 90%;
+    max-width: 950px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+/* Header */
+.modal-header {
+    background-color: #0176d3;
+    color: #fff;
+    padding: 1.5rem 2rem;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+/* Body */
+.modal-body {
+    background-color: #f8f9fb;
+    padding: 2rem; /* increase padding for breathing room */
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Table wrapper */
+.table-wrapper {
+    overflow-x: auto;
+    padding: 1rem; /* adds space around table */
+    margin-bottom: 1.5rem; /* separates table from footer */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* Gorgeous table */
+.gorgeous-tasks-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    min-width: 700px; /* ensure columns are wide */
+}
+
+/* Table header */
+.gorgeous-tasks-table thead tr {
+    background-color: #e6f2ff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1b263b;
+    border-bottom: 2px solid #d1d9e6;
+}
+
+/* Table body rows */
+.gorgeous-tasks-table tbody tr {
+    transition: background 0.25s ease-in-out;
+}
+
+.gorgeous-tasks-table tbody tr:nth-child(even) {
+    background-color: #f8f9fb;
+}
+
+.gorgeous-tasks-table tbody tr:hover {
+    background-color: #d8eaff;
+}
+
+/* Table cells */
+.gorgeous-tasks-table td {
+    padding: 1.2rem 1.5rem; /* increase padding */
+    font-size: 0.88rem;
+    color: #1b263b;
+    vertical-align: middle;
+}
+
+/* Task name clickable link */
+.task-link {
+    color: #0176d3;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.task-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Footer */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: none;
+    background-color: #f8f9fb;
+}
+
+/* Combobox */
+lightning-combobox {
+    min-width: 150px;
+    height: 2.2rem; /* gives better spacing */
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .modal-container {
+        width: 95%;
+    }
+
+    .gorgeous-tasks-table {
+        min-width: 100%;
+    }
+
+    lightning-combobox {
+        min-width: 120px;
+    }
+
+    .task-link {
+        font-size: 0.85rem;
+    }
+}

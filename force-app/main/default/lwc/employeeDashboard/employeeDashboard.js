@@ -1,90 +1,122 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, wire, track } from 'lwc';
+import getEmployeeOnboardingData from '@salesforce/apex/OnboardingDashboardController.getEmployeeOnboardingData';
+import runBackgroundCheckForEmployee from '@salesforce/apex/OnboardingDashboardController.runBackgroundCheckForEmployee';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
-import { NavigationMixin } from 'lightning/navigation';
-import getEmployeeOnboardingData from '@salesforce/apex/OnboardingDashboardController.getEmployeeOnboardingData';
-import updateTaskStatus from '@salesforce/apex/OnboardingDashboardController.updateTaskStatus';
 
-export default class EmployeeDashboard extends NavigationMixin(LightningElement) {
-    employees = [];
+export default class EmployeeDashboard extends LightningElement {
+    @track employees = [];
     wiredResult;
 
+    // 🟢 Fetch all employee onboarding data
     @wire(getEmployeeOnboardingData)
-    wiredTasks(result) {
+    wiredData(result) {
         this.wiredResult = result;
         const { data, error } = result;
-        if (data) this.employees = this.transformData(data);
-        else if (error) this.showToast('Error', 'Could not load data', 'error');
-    }
 
-    transformData(data) {
-        const empMap = {};
-        data.forEach(task => {
-            const emp = task.Employee__r || {};
-            const name = emp.Name || 'Unknown';
-            if (!empMap[name]) empMap[name] = { 
-                name, 
-                department: emp.Department__c, 
-                startDate: this.formatDate(emp.Joining_Date__c), 
-                tasks: [] 
-            };
-            empMap[name].tasks.push({
-                id: task.Id,
-                name: task.Name,
-                status: task.Status__c,
-                category: task.Task_Category__c,
-                dueDate: this.formatDate(task.Due_Date__c),
-                hasDueDate: !!task.Due_Date__c,
-                trainingLink: task.Training_Program__r?.Meeting_Link__c,
-                showComplete: task.Status__c === 'In Progress'
-            });
-        });
-
-        const colors = ['blue', 'green', 'purple', 'orange', 'teal'];
-        return Object.values(empMap).map((emp, i) => ({
-            ...emp,
-            colorClass: `emp-card-${colors[i % colors.length]}`,
-            ...this.calculateMetrics(emp.tasks)
-        }));
-    }
-
-    calculateMetrics(tasks) {
-        const total = tasks.length;
-        const completed = tasks.filter(t => t.status === 'Completed').length;
-        const inProgress = tasks.filter(t => t.status === 'In Progress').length;
-        const progress = total ? Math.round((completed / total) * 100) : 0;
-        return {
-            completedTasks: completed,
-            pendingTasks: inProgress,
-            progress,
-            progressVariant: progress === 100 ? 'success' : progress >= 60 ? 'info' : 'warning'
-        };
-    }
-
-    async handleComplete(event) {
-        try {
-            await updateTaskStatus({ taskId: event.currentTarget.dataset.taskId, status: 'Completed' });
-            await refreshApex(this.wiredResult);
-            this.showToast('Success', 'Task marked as completed', 'success');
-        } catch {
-            this.showToast('Error', 'Update failed', 'error');
+        if (data) {
+            this.employees = data.map(emp => ({
+                id: emp.id,
+                name: emp.name,
+                department: emp.department,
+                joiningDate: this.formatDate(emp.joiningDate),
+                onboardingStatus: emp.onboardingStatus || 'Not Started',
+                backgroundStatus: emp.backgroundStatus || 'Pending',
+                actionLabel: this.getActionLabel(emp.backgroundStatus),
+                onboardingBadgeClass: this.getOnboardingBadgeClass(emp.onboardingStatus),
+                bgBadgeClass: this.getBgBadgeClass(emp.backgroundStatus)
+            }));
+        } else if (error) {
+            this.showToast('Error', 'Unable to load employee data', 'error');
         }
     }
 
-    handleTrainingClick(event) {
-        const url = event.currentTarget.dataset.url;
-        if (url) this[NavigationMixin.Navigate]({ type: 'standard__webPage', attributes: { url } });
+    // 🟣 Get button label
+    getActionLabel(bgStatus) {
+        if (bgStatus === 'Verified') return 'Reverify';
+        if (bgStatus === 'Rejected') return 'Recheck';
+        return 'Run Check';
     }
 
-    showToast(title, message, variant = 'info') {
-        this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
+    // 🟢 Onboarding badge
+    getOnboardingBadgeClass(status) {
+        switch (status) {
+            case 'Completed':
+                return 'badge badge-success';
+            case 'In Progress':
+                return 'badge badge-warning';
+            default:
+                return 'badge badge-neutral';
+        }
     }
 
+    // 🟡 Background badge
+    getBgBadgeClass(status) {
+        switch (status) {
+            case 'Verified':
+                return 'badge badge-success';
+            case 'Rejected':
+                return 'badge badge-error';
+            default:
+                return 'badge badge-neutral';
+        }
+    }
+
+    // 🟠 Run background check
+    async handleAction(event) {
+        const empName = event.currentTarget.dataset.empname;
+        this.showToast('Processing', `Running background check for ${empName}...`, 'info');
+
+        try {
+            const updatedStatus = await runBackgroundCheckForEmployee({ empName });
+
+            this.showToast('Success', `Background check completed for ${empName}`, 'success');
+
+            // ✅ Update UI instantly
+            this.employees = this.employees.map(emp => {
+                if (emp.name === empName) {
+                    return {
+                        ...emp,
+                        backgroundStatus: updatedStatus || 'Verified',
+                        bgBadgeClass: this.getBgBadgeClass(updatedStatus || 'Verified'),
+                        actionLabel: this.getActionLabel(updatedStatus || 'Verified')
+                    };
+                }
+                return emp;
+            });
+
+            await refreshApex(this.wiredResult);
+
+        } catch (error) {
+            console.error('Error:', error);
+            this.showToast('Error', `Failed background check for ${empName}`, 'error');
+        }
+    }
+
+    // 🔵 Open modal to view tasks
+    handleViewTasks(event) {
+        const empId = event.currentTarget.dataset.empid;
+        const empName = this.employees.find(emp => emp.id === empId).name;
+
+        const modal = this.template.querySelector('c-onboarding-tasks-modal');
+        if (modal) {
+            modal.openModal(empId, empName);
+        }
+    }
+
+    // 📅 Format date
     formatDate(dateStr) {
-        return dateStr ? new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+        return dateStr
+            ? new Date(dateStr).toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric'
+              })
+            : '';
     }
 
-    get displayEmployees() {
-        return this.employees;
+    // 🧾 Toast helper
+    showToast(title, message, variant) {
+        this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
     }
 }
