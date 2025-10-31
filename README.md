@@ -56,19 +56,23 @@ for showing the Onboarding employee by Department
 Screenshots Of Interfaces::
 
 Employee Dashboards:
-<img width="1905" height="977" alt="image" src="https://github.com/user-attachments/assets/e5cf4203-d803-4e08-a40f-f99e23b16e84" />
+<img width="1875" height="1079" alt="image" src="https://github.com/user-attachments/assets/c6014b21-b313-4f3e-a214-69c8c73b5f38" />
+
 
 Employee Documents Form--
 <img width="1847" height="971" alt="image" src="https://github.com/user-attachments/assets/44fffed6-2a48-44c6-a9d1-27fc308870a9" />
 
 Employee Page
-<img width="1914" height="906" alt="image" src="https://github.com/user-attachments/assets/08797cfd-0fee-4bfc-947b-3f3ae38cb68e" />
+<img width="1910" height="1001" alt="image" src="https://github.com/user-attachments/assets/49d1b1be-f405-48a9-b568-b97e74c2b7e6" />
+
 
 Onboarding Task Page--
-<img width="1902" height="959" alt="image" src="https://github.com/user-attachments/assets/e1c4f674-dde3-4ca7-989c-6d9d10dc23bb" />
+<img width="1892" height="1076" alt="image" src="https://github.com/user-attachments/assets/11c9c012-49c1-43b5-9775-559c70994c38" />
+
 
 Employee Documents Page --
-<img width="1918" height="629" alt="image" src="https://github.com/user-attachments/assets/25cbe626-6bb8-4c4b-9c7b-a12c124e100b" />
+<img width="1876" height="1028" alt="image" src="https://github.com/user-attachments/assets/f2efb3c6-1d86-46ff-8b32-bcd6aa6af747" />
+
 
 
 
