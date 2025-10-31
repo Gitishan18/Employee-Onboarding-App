@@ -1,7 +1,9 @@
 <template>
     <lightning-card title="Employee Onboarding Dashboard" icon-name="standard:employee">
         <div class="dashboard-container">
-            <div class="custom-table-wrapper">
+            
+            <!-- Desktop View -->
+            <div class="custom-table-wrapper desktop-view">
                 <table class="slds-table slds-table_bordered custom-table">
                     <thead>
                         <tr class="slds-text-title_caps">
@@ -14,7 +16,6 @@
                             <th>View Tasks</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         <template for:each={employees} for:item="emp">
                             <tr key={emp.id}>
@@ -26,19 +27,8 @@
                                 </td>
                                 <td>{emp.department}</td>
                                 <td>{emp.joiningDate}</td>
-
-                                <td>
-                                    <span class={emp.onboardingBadgeClass}>
-                                        {emp.onboardingStatus}
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class={emp.bgBadgeClass}>
-                                        {emp.backgroundStatus}
-                                    </span>
-                                </td>
-
+                                <td><span class={emp.onboardingBadgeClass}>{emp.onboardingStatus}</span></td>
+                                <td><span class={emp.bgBadgeClass}>{emp.backgroundStatus}</span></td>
                                 <td>
                                     <lightning-button
                                         label={emp.actionLabel}
@@ -48,7 +38,6 @@
                                         onclick={handleAction}>
                                     </lightning-button>
                                 </td>
-
                                 <td>
                                     <lightning-button
                                         label="View Tasks"
@@ -64,9 +53,54 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Mobile View -->
+            <div class="mobile-view">
+                <template for:each={employees} for:item="emp">
+                    <div key={emp.id} class="employee-card slds-box slds-m-around_x-small">
+                        <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="emp-name slds-text-heading_small">
+                                    <lightning-icon icon-name="standard:contact" size="x-small" class="emp-icon"></lightning-icon>
+                                    <span>{emp.name}</span>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <p><strong>Department:</strong> {emp.department}</p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <p><strong>Joining:</strong> {emp.joiningDate}</p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <p><strong>Status:</strong> <span class={emp.onboardingBadgeClass}>{emp.onboardingStatus}</span></p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <p><strong>Background:</strong> <span class={emp.bgBadgeClass}>{emp.backgroundStatus}</span></p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                                <lightning-button
+                                    label={emp.actionLabel}
+                                    variant="brand-outline"
+                                    class="slds-m-right_small"
+                                    data-empname={emp.name}
+                                    onclick={handleAction}>
+                                </lightning-button>
+                                <lightning-button
+                                    label="View Tasks"
+                                    variant="neutral"
+                                    icon-name="utility:preview"
+                                    data-empid={emp.id}
+                                    onclick={handleViewTasks}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
         </div>
 
-        <!-- Modal for tasks -->
+        <!-- Modal -->
         <c-onboarding-tasks-modal></c-onboarding-tasks-modal>
     </lightning-card>
 </template>

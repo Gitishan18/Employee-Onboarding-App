@@ -9,6 +9,21 @@ export default class OnboardingTasksModal extends LightningElement {
     @track empId;
     @track empName;
     @track noTasks = false;
+    @track isMobile = false; // ✅ Added
+
+    connectedCallback() {
+        this.detectDevice();
+        // Detect screen size dynamically
+        window.addEventListener('resize', this.detectDevice.bind(this));
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener('resize', this.detectDevice.bind(this));
+    }
+
+    detectDevice() {
+        this.isMobile = window.innerWidth <= 768;
+    }
 
     // ✅ Open modal and load tasks
     @api
@@ -49,8 +64,6 @@ export default class OnboardingTasksModal extends LightningElement {
     // ✅ Handle Mark as Completed button
     markCompleted(event) {
         const taskId = event.target.dataset.id;
-        console.log('➡️ Marking task as completed:', taskId);
-
         if (!taskId) {
             this.showToast('Error', 'Invalid task ID', 'error');
             return;
@@ -59,7 +72,8 @@ export default class OnboardingTasksModal extends LightningElement {
         markTaskAsCompleted({ taskId })
             .then(() => {
                 this.showToast('Success', 'Task marked as completed', 'success');
-                // Update UI instantly
+
+                // ✅ Instantly update UI without refresh
                 this.tasks = this.tasks.map(task =>
                     task.Id === taskId
                         ? { ...task, Status__c: 'Completed', isCompleted: true }

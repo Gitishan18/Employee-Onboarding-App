@@ -79,17 +79,18 @@ public static String runBackgroundCheckForEmployee(String empName) {
 
 
 
-    // 🔵 4. Fetch all onboarding tasks for a specific employee
-    @AuraEnabled(cacheable=true)
-    public static List<Onboarding_Task__c> getEmployeeTasks(Id empId){
-        return [
-            SELECT Id, Name, Description__c, Due_Date__c, Priority__c, Status__c, 
-                   Task_Category__c, Training_Program__c
-            FROM Onboarding_Task__c
-            WHERE Employee__c = :empId
-            ORDER BY Due_Date__c ASC
-        ];
-    }
+// 🔵 4. Fetch all onboarding tasks for a specific employee
+@AuraEnabled(cacheable=false) // ❌ disable cache to always get fresh data
+public static List<Onboarding_Task__c> getEmployeeTasks(Id empId) {
+    return [
+        SELECT Id, Name, Description__c, Due_Date__c, Priority__c, Status__c, 
+               Task_Category__c, Training_Program__c
+        FROM Onboarding_Task__c
+        WHERE Employee__c = :empId
+        ORDER BY Due_Date__c ASC
+    ];
+}
+
 
     // 🟡 5. Mark single onboarding task as Completed (used by modal component)
     @AuraEnabled

@@ -10,6 +10,7 @@
 
                 <!-- Body -->
                 <div class="slds-modal__content modal-body">
+
                     <template if:true={noTasks}>
                         <div class="no-tasks-message">
                             <lightning-icon icon-name="utility:info" size="small" class="info-icon"></lightning-icon>
@@ -18,50 +19,80 @@
                     </template>
 
                     <template if:false={noTasks}>
-                        <div class="table-wrapper">
-                            <table class="gorgeous-tasks-table">
-                                <thead>
-                                    <tr>
-                                        <th>Task Name</th>
-                                        <th>Category</th>
-                                        <th>Status</th>
-                                        <th>Due Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template for:each={tasks} for:item="task">
-                                        <tr key={task.Id}>
-                                            <td>{task.Name}</td>
-                                            <td>{task.Task_Category__c}</td>
-                                            <td>{task.Status__c}</td>
-                                            <td>{task.Due_Date__c}</td>
-                                            <td>
-                                                <template if:false={task.isCompleted}>
-                                                    <lightning-button
-                                                        label="Mark as Completed"
-                                                        variant="brand-outline"
-                                                        data-id={task.Id}
-                                                        onclick={markCompleted}>
-                                                    </lightning-button>
-                                                </template>
-                                                <template if:true={task.isCompleted}>
-                                                    <span class="completed-label">✔ Completed</span>
-                                                </template>
-                                            </td>
+                        <!-- Desktop Version -->
+                        <template if:false={isMobile}>
+                            <div class="table-wrapper">
+                                <table class="gorgeous-tasks-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Task Name</th>
+                                            <th>Category</th>
+                                            <th>Status</th>
+                                            <th>Due Date</th>
+                                            <th>Action</th>
                                         </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={tasks} for:item="task">
+                                            <tr key={task.Id}>
+                                                <td>{task.Name}</td>
+                                                <td>{task.Task_Category__c}</td>
+                                                <td>{task.Status__c}</td>
+                                                <td>{task.Due_Date__c}</td>
+                                                <td>
+                                                    <template if:false={task.isCompleted}>
+                                                        <lightning-button
+                                                            label="Mark as Completed"
+                                                            variant="brand-outline"
+                                                            data-id={task.Id}
+                                                            onclick={markCompleted}>
+                                                        </lightning-button>
+                                                    </template>
+                                                    <template if:true={task.isCompleted}>
+                                                        <span class="completed-label">✔ Completed</span>
+                                                    </template>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+
+                        <!-- Mobile Version -->
+                        <template if:true={isMobile}>
+                            <div class="mobile-task-list">
+                                <template for:each={tasks} for:item="task">
+                                    <div key={task.Id} class="task-card slds-box slds-m-around_x-small">
+                                        <p><strong>Task:</strong> {task.Name}</p>
+                                        <p><strong>Category:</strong> {task.Task_Category__c}</p>
+                                        <p><strong>Status:</strong> {task.Status__c}</p>
+                                        <p><strong>Due:</strong> {task.Due_Date__c}</p>
+                                        <div class="slds-m-top_small">
+                                            <template if:false={task.isCompleted}>
+                                                <lightning-button
+                                                    label="Mark as Completed"
+                                                    variant="brand-outline"
+                                                    data-id={task.Id}
+                                                    onclick={markCompleted}>
+                                                </lightning-button>
+                                            </template>
+                                            <template if:true={task.isCompleted}>
+                                                <span class="completed-label">✔ Completed</span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
                     </template>
+
                 </div>
 
                 <!-- Footer -->
                 <footer class="slds-modal__footer modal-footer">
                     <lightning-button label="Close" onclick={closeModal}></lightning-button>
                 </footer>
-
             </div>
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
